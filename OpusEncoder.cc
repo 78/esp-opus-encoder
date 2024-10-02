@@ -40,14 +40,13 @@ void OpusEncoder::SetComplexity(int complexity) {
     }
 }
 
-void OpusEncoder::Encode(const iovec pcm, std::function<void(const iovec opus)> handler) {
+void OpusEncoder::Encode(const std::vector<int16_t>& pcm, std::function<void(const uint8_t* opus, size_t opus_size)> handler) {
     if (audio_enc_ == nullptr) {
         ESP_LOGE(TAG, "Audio encoder is not configured");
         return;
     }
 
-    auto pcm_data = (int16_t*)pcm.iov_base;
-    in_buffer_.insert(in_buffer_.end(), pcm_data, pcm_data + pcm.iov_len / sizeof(int16_t));
+    in_buffer_.insert(in_buffer_.end(), pcm.begin(), pcm.end());
 
     while (in_buffer_.size() >= frame_size_) {
         auto ret = opus_encode(audio_enc_, in_buffer_.data(), frame_size_, out_buffer_.data(), out_buffer_.size());
@@ -57,7 +56,7 @@ void OpusEncoder::Encode(const iovec pcm, std::function<void(const iovec opus)> 
         }
 
         if (handler != nullptr) {
-            handler(iovec { out_buffer_.data(), (size_t)ret });
+            handler(out_buffer_.data(), ret);
         }
 
         in_buffer_.erase(in_buffer_.begin(), in_buffer_.begin() + frame_size_);

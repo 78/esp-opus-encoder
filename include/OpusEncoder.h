@@ -6,7 +6,6 @@
 #include <vector>
 #include <memory>
 
-#include "lwip/sockets.h"
 #include "opus.h"
 
 
@@ -17,7 +16,7 @@ public:
 
     void Configure(int sample_rate, int channels, int duration_ms = 60);
     void SetComplexity(int complexity);
-    void Encode(const iovec pcm, std::function<void(const iovec opus)> handler);
+    void Encode(const std::vector<int16_t>& pcm, std::function<void(const uint8_t* opus, size_t opus_size)> handler);
     bool IsBufferEmpty() const { return in_buffer_.empty(); }
     void ResetState();
 
