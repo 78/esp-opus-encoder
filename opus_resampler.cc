@@ -1,4 +1,4 @@
-#include "OpusResampler.h"
+#include "opus_resampler.h"
 #include "silk_resampler.h"
 #include "esp_log.h"
 
