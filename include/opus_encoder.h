@@ -1,29 +1,29 @@
-#ifndef _OPUS_ENCODER_H_
-#define _OPUS_ENCODER_H_
+#ifndef _OPUS_ENCODER_WRAPPER_H_
+#define _OPUS_ENCODER_WRAPPER_H_
 
 #include <functional>
-#include <string>
 #include <vector>
 #include <memory>
 
 #include "opus.h"
 
+#define MAX_OPUS_PACKET_SIZE 1500
 
-class OpusEncoder {
+
+class OpusEncoderWrapper {
 public:
-    OpusEncoder();
-    ~OpusEncoder();
+    OpusEncoderWrapper(int sample_rate, int channels, int duration_ms = 60);
+    ~OpusEncoderWrapper();
 
-    void Configure(int sample_rate, int channels, int duration_ms = 60);
+    void SetDtx(bool enable);
     void SetComplexity(int complexity);
-    void Encode(const std::vector<int16_t>& pcm, std::function<void(const uint8_t* opus, size_t opus_size)> handler);
+    void Encode(std::vector<int16_t>&& pcm, std::function<void(std::vector<uint8_t>&& opus)> handler);
     bool IsBufferEmpty() const { return in_buffer_.empty(); }
     void ResetState();
 
 private:
     struct OpusEncoder* audio_enc_ = nullptr;
     int frame_size_;
-    std::vector<uint8_t> out_buffer_;
     std::vector<int16_t> in_buffer_;
 };
 
