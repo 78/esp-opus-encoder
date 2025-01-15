@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 #include <memory>
+#include <cstdint>
 
 #include "opus.h"
 

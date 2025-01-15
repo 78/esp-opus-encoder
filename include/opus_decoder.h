@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <vector>
+#include <cstdint>
 
 #include "opus.h"
 
