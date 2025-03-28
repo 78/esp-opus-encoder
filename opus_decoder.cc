@@ -3,7 +3,8 @@
 
 #define TAG "OpusDecoderWrapper"
 
-OpusDecoderWrapper::OpusDecoderWrapper(int sample_rate, int channels, int duration_ms) {
+OpusDecoderWrapper::OpusDecoderWrapper(int sample_rate, int channels, int duration_ms)
+    : sample_rate_(sample_rate), duration_ms_(duration_ms) {
     int error;
     audio_dec_ = opus_decoder_create(sample_rate, channels, &error);
     if (audio_dec_ == nullptr) {

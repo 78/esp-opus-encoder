@@ -3,7 +3,8 @@
 
 #define TAG "OpusEncoderWrapper"
 
-OpusEncoderWrapper::OpusEncoderWrapper(int sample_rate, int channels, int duration_ms) {
+OpusEncoderWrapper::OpusEncoderWrapper(int sample_rate, int channels, int duration_ms)
+    : sample_rate_(sample_rate), duration_ms_(duration_ms) {
     int error;
     audio_enc_ = opus_encoder_create(sample_rate, channels, OPUS_APPLICATION_VOIP, &error);
     if (audio_enc_ == nullptr) {
