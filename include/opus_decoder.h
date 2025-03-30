@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 #include <cstdint>
+#include <mutex>
 
 #include "opus.h"
 
@@ -25,6 +26,7 @@ public:
     }
 
 private:
+    std::mutex mutex_;
     struct OpusDecoder* audio_dec_ = nullptr;
     int frame_size_;
     int sample_rate_;

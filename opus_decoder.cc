@@ -16,12 +16,14 @@ OpusDecoderWrapper::OpusDecoderWrapper(int sample_rate, int channels, int durati
 }
 
 OpusDecoderWrapper::~OpusDecoderWrapper() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_dec_ != nullptr) {
         opus_decoder_destroy(audio_dec_);
     }
 }
 
 bool OpusDecoderWrapper::Decode(std::vector<uint8_t>&& opus, std::vector<int16_t>& pcm) {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_dec_ == nullptr) {
         ESP_LOGE(TAG, "Audio decoder is not configured");
         return false;
@@ -38,6 +40,7 @@ bool OpusDecoderWrapper::Decode(std::vector<uint8_t>&& opus, std::vector<int16_t
 }
 
 void OpusDecoderWrapper::ResetState() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_dec_ != nullptr) {
         opus_decoder_ctl(audio_dec_, OPUS_RESET_STATE);
     }

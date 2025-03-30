@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <cstdint>
+#include <mutex>
 
 #include "opus.h"
 
@@ -31,6 +32,7 @@ public:
     void ResetState();
 
 private:
+    std::mutex mutex_;
     struct OpusEncoder* audio_enc_ = nullptr;
     int sample_rate_;
     int duration_ms_;

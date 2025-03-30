@@ -6,6 +6,6 @@ files:
   exclude:
   - .git
 license: MIT
-repository: git://github.com/78/esp-opus-encoder.git
-url: https://github.com/78/esp-opus-encoder.git
+repository: https://github.com/78/esp-opus-encoder
+url: https://github.com/78/esp-opus-encoder
 version: 2.2.0

@@ -21,12 +21,14 @@ OpusEncoderWrapper::OpusEncoderWrapper(int sample_rate, int channels, int durati
 }
 
 OpusEncoderWrapper::~OpusEncoderWrapper() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_enc_ != nullptr) {
         opus_encoder_destroy(audio_enc_);
     }
 }
 
 void OpusEncoderWrapper::Encode(std::vector<int16_t>&& pcm, std::function<void(std::vector<uint8_t>&& opus)> handler) {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_enc_ == nullptr) {
         ESP_LOGE(TAG, "Audio encoder is not configured");
         return;
@@ -56,6 +58,7 @@ void OpusEncoderWrapper::Encode(std::vector<int16_t>&& pcm, std::function<void(s
 }
 
 void OpusEncoderWrapper::ResetState() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_enc_ != nullptr) {
         opus_encoder_ctl(audio_enc_, OPUS_RESET_STATE);
         in_buffer_.clear();
@@ -63,12 +66,14 @@ void OpusEncoderWrapper::ResetState() {
 }
 
 void OpusEncoderWrapper::SetDtx(bool enable) {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_enc_ != nullptr) {
         opus_encoder_ctl(audio_enc_, OPUS_SET_DTX(enable ? 1 : 0));
     }
 }
 
 void OpusEncoderWrapper::SetComplexity(int complexity) {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (audio_enc_ != nullptr) {
         opus_encoder_ctl(audio_enc_, OPUS_SET_COMPLEXITY(complexity));
     }
