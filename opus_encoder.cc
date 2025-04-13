@@ -41,16 +41,15 @@ void OpusEncoderWrapper::Encode(std::vector<int16_t>&& pcm, std::function<void(s
     }
 
     while (in_buffer_.size() >= frame_size_) {
-        std::vector<uint8_t> opus(MAX_OPUS_PACKET_SIZE);
-        auto ret = opus_encode(audio_enc_, in_buffer_.data(), frame_size_, opus.data(), opus.size());
+        uint8_t opus[MAX_OPUS_PACKET_SIZE];
+        auto ret = opus_encode(audio_enc_, in_buffer_.data(), frame_size_, opus, MAX_OPUS_PACKET_SIZE);
         if (ret < 0) {
             ESP_LOGE(TAG, "Failed to encode audio, error code: %ld", ret);
             return;
         }
-        opus.resize(ret);
 
         if (handler != nullptr) {
-            handler(std::move(opus));
+            handler(std::vector<uint8_t>(opus, opus + ret));
         }
 
         in_buffer_.erase(in_buffer_.begin(), in_buffer_.begin() + frame_size_);

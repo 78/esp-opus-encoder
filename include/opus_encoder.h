@@ -9,7 +9,7 @@
 
 #include "opus.h"
 
-#define MAX_OPUS_PACKET_SIZE 1500
+#define MAX_OPUS_PACKET_SIZE 1000
 
 
 class OpusEncoderWrapper {
