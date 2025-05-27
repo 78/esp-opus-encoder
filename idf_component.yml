@@ -1,5 +1,5 @@
 dependencies:
-  idf: "^5.3"
+  idf: ">=5.3"
   78/esp-opus: "^1.0.5"
 description: ESP32 Opus Encoder C++ wrapper
 files:
