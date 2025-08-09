@@ -36,6 +36,8 @@ bool OpusDecoderWrapper::Decode(std::vector<uint8_t>&& opus, std::vector<int16_t
         return false;
     }
 
+    // Resize the pcm vector to the actual decoded samples
+    pcm.resize(ret);
     return true;
 }
 
